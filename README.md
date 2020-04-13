@@ -4,7 +4,7 @@
 
 ## What is Request?
 
-Request is a simple HTTP client for Go.
+Request is a simple HTTP client for Go that supports common request types when working with APIs.
 
 [↑ Back to top](#request)
 
