@@ -35,7 +35,7 @@ func TestGetJSON(t *testing.T) {
 
 	var user User
 
-	b, err := GetJSON(s.URL)
+	b, _, err := GetJSON(s.URL)
 
 	if err != nil {
 		t.Errorf("Request failed")
