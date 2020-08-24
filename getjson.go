@@ -20,7 +20,7 @@ func GetJSON(url string, header map[string]string) ([]byte, *http.Response, erro
 	}
 
 	for k, v := range header {
-		req.Header.Set(k, header[v])
+		req.Header.Set(k, v)
 	}
 
 	res, err := c.Do(req)
