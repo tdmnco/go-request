@@ -1,9 +1,9 @@
 # Request
 
-- [What is Request?](#what-is-request)
+- [About?](#about)
 - [Getting help](#getting-help)
 
-## What is Request?
+## About
 
 Request is a simple HTTP client for Go that supports common request types when working with APIs.
 
