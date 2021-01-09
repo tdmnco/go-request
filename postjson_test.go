@@ -7,15 +7,19 @@ import (
 	"testing"
 )
 
-type getJSONResponse struct {
+type postJSONRequest struct {
 	FirstName string `json:"firstName,omitempty"`
 	ID        int    `json:"id,omitempty"`
 	LastName  string `json:"lastName,omitempty"`
 }
 
-func TestGetJSON(t *testing.T) {
+type postJSONResponse struct {
+	Status string `json:"status,omitempty"`
+}
+
+func TestPostJSON(t *testing.T) {
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet {
+		if r.Method != http.MethodPost {
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 
 			return
@@ -24,7 +28,7 @@ func TestGetJSON(t *testing.T) {
 		w.Header().Set("Status", "200")
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
-		res := getJSONResponse{"Kasper", 1, "Tidemann"}
+		res := postJSONResponse{"Success"}
 
 		payload, err := json.Marshal(res)
 
@@ -39,7 +43,15 @@ func TestGetJSON(t *testing.T) {
 
 	defer s.Close()
 
-	b, _, err := GetJSON(s.URL, nil)
+	req := postJSONRequest{"Kasper", 1, "Tidemann"}
+
+	m, err := json.Marshal(req)
+
+	if err != nil {
+		t.Errorf("Marshalling failed")
+	}
+
+	b, _, err := PostJSON(s.URL, nil, m)
 
 	if err != nil {
 		t.Errorf("Request failed")
@@ -49,15 +61,15 @@ func TestGetJSON(t *testing.T) {
 		t.Errorf("Response body is empty")
 	}
 
-	var r getJSONResponse
+	var res postJSONResponse
 
-	err = json.Unmarshal(b, &r)
+	err = json.Unmarshal(b, &res)
 
 	if err != nil {
 		t.Errorf("Error when unmarshalling payload")
 	}
 
-	if r.FirstName != "Kasper" || r.ID != 1 || r.LastName != "Tidemann" {
-		t.Errorf("Response payload mismatch")
+	if res.Status != "Success" {
+		t.Errorf("Response status mismatch")
 	}
 }
